@@ -37,3 +37,12 @@ def get_chunks(file_id: str):
             "replica_nodes": c.replica_nodes,
         })
     return result
+
+
+@app.get("/files/{file_id}")
+def get_file(file_id: str):
+    db = SessionLocal()
+    f = db.query(File).filter(File.id == file_id).first()
+    if not f:
+        return {"error": "not found"}
+    return {"id": f.id, "filename": f.filename, "size": f.size}
